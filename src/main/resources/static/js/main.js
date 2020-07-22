@@ -87,7 +87,7 @@ $(function(){
             url: '/tasks/',
             success: function(response)
             {
-                $('.tasks-div').remove();
+                $('div[data-id]').remove();
             },
             error: function(response){
                 if(response.status === 404){
@@ -109,7 +109,7 @@ $(function(){
                 data: data,
                 success: function(response) {
                     $('#task-edit-form').css('display', 'none');
-                    location.reload();
+                    Location.reload();
                 },
                 error: function(response){
                     if(response.status === 404){
