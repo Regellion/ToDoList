@@ -6,17 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import main.model.Task;
-
-
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
 public class TaskController {
     @Autowired
-    private ServiceTask serviceTask = new ServiceTask();
-    @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+
+    private ServiceTask serviceTask = new ServiceTask(taskRepository);
 
     @GetMapping("/tasks/")
     public List<Task> list(){
