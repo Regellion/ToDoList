@@ -3,6 +3,7 @@ package main.service;
 import main.model.Task;
 import main.model.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,12 @@ import java.util.Optional;
 
 @Service
 public class ServiceTask {
-    @Autowired
+
     private TaskRepository taskRepository;
+
+    public ServiceTask(TaskRepository taskRepository){
+        this.taskRepository = taskRepository;
+    }
 
     public List<Task> getListTasks(){
         Iterable<Task> taskIterable = taskRepository.findAll();
@@ -44,12 +49,12 @@ public class ServiceTask {
     }
 
     public ResponseEntity deleteAllTask(){
-        Iterable<Task> taskIterable = taskRepository.findAll();
-        List<Task> tasks = Collections.synchronizedList(new ArrayList<>());
-        for (Task task : taskIterable){
-            tasks.add(task);
-        }
-        if(tasks.size() == 0){
+        // Почитал статьи и стаковерфлоу, там реккомендуют не изобретать велосипед и воспользоваться методом
+        // repositoryName.count() для подсчета элементов. Говорят что это современный подход)
+        // Но если что, я понял что это же можно было бы сделать при помощи анотации
+        // @Query("SELECT COUNT(*) FROM Task")
+
+        if(taskRepository.count() == 0){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         taskRepository.deleteAll();
